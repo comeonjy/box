@@ -3,7 +3,7 @@
 # DOCKER_USR:=xxx
 # IMAGES_REPO:=ccr.ccs.tencentyun.com/xxx
 # REPO_DOMAIN:=ccr.ccs.tencentyun.com
-# include env.make
+include env.make
 
 # 镜像tag
 IMAGE_TAG:=v0.0.1
@@ -27,8 +27,8 @@ deploy:
 	rm main
 	echo "$(DOCKER_PSW)" | docker login --username=$(DOCKER_USR) $(REPO_DOMAIN) --password-stdin
 	docker push $(IMAGES_REPO)/$(SERVER_NAME):$(IMAGE_TAG)
-	#git commit --allow-empty -am "deploy:$(IMAGE_TAG)"
-	#git push
+	git commit --allow-empty -am "deploy:$(IMAGE_TAG)"
+	git push
 
 # 代码检查
 vet:
