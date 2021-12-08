@@ -17,13 +17,13 @@ import (
 
 var ProviderSet = wire.NewSet(NewGrpcServer, NewHttpServer)
 
-func NewGrpcServer(srv *service.SchedulerService, conf configs.Interface, logger *xlog.Logger) *grpc.Server {
+func NewGrpcServer(srv *service.BoxService, conf configs.Interface, logger *xlog.Logger) *grpc.Server {
 	server := grpc.NewServer(
 		grpc.ConnectionTimeout(2*time.Second),
 		grpc.ChainUnaryInterceptor(
-			xmiddleware.GrpcLogger(xenv.GetEnv(xenv.TraceName), logger), xmiddleware.GrpcValidate, xmiddleware.GrpcRecover(logger), xmiddleware.GrpcAuth, xmiddleware.GrpcApm(conf.Get().ApmUrl, xenv.GetEnv(xenv.AppName), xenv.GetEnv(xenv.AppVersion), xenv.GetEnv(xenv.AppEnv))),
+			xmiddleware.GrpcLogger(xenv.GetEnv(xenv.TraceName), logger), xmiddleware.GrpcValidate, xmiddleware.GrpcRecover(logger), xmiddleware.GrpcAuth),
 	)
-	v1.RegisterSchedulerServer(server, srv)
+	v1.RegisterBoxServer(server, srv)
 	reloadconfig.RegisterReloadConfigServer(server, reloadconfig.NewServer(conf))
 	return server
 }

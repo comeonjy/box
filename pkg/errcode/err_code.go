@@ -6,6 +6,8 @@ const (
 	ParamErr      Code = iota + 1000 // 参数错误
 	SourceNotFind                    // 资源不存在
 	SystemErr                        // 系统错误
+	SQLErr                           // 数据库错误
+	MarshalErr                       // json错误
 )
 
 func (i Code) GetCode() uint32 {

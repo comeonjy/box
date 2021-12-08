@@ -22,8 +22,8 @@ func NewHttpServer(ctx context.Context, conf configs.Interface, logger *xlog.Log
 		ReadHeaderTimeout: 2 * time.Second,
 		WriteTimeout:      2 * time.Second,
 	}
-	if err := v1.RegisterSchedulerHandlerFromEndpoint(ctx, mux, "localhost:"+xenv.GetEnv(xenv.GrpcPort), []grpc.DialOption{grpc.WithInsecure()}); err != nil {
-		panic("RegisterSchedulerHandlerFromEndpoint" + err.Error())
+	if err := v1.RegisterBoxHandlerFromEndpoint(ctx, mux, "localhost:"+xenv.GetEnv(xenv.GrpcPort), []grpc.DialOption{grpc.WithInsecure()}); err != nil {
+		panic("RegisterBoxHandlerFromEndpoint" + err.Error())
 	}
 	return &server
 }

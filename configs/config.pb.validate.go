@@ -47,41 +47,7 @@ func (m *Config) Validate() error {
 		}
 	}
 
-	if utf8.RuneCountInString(m.GetGrpcAddr()) < 3 {
-		return ConfigValidationError{
-			field:  "GrpcAddr",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	if utf8.RuneCountInString(m.GetHttpAddr()) < 3 {
-		return ConfigValidationError{
-			field:  "HttpAddr",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	if utf8.RuneCountInString(m.GetPprofAddr()) < 3 {
-		return ConfigValidationError{
-			field:  "PprofAddr",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	// no validation rules for MongoUsername
-
-	// no validation rules for MongoPassword
-
-	if utf8.RuneCountInString(m.GetMongoAddr()) < 3 {
-		return ConfigValidationError{
-			field:  "MongoAddr",
-			reason: "value length must be at least 3 runes",
-		}
-	}
-
-	// no validation rules for MongoDatabase
-
-	// no validation rules for ApmUrl
+	// no validation rules for MysqlConf
 
 	return nil
 }

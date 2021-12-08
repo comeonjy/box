@@ -1,0 +1,126 @@
+syntax = "proto3";
+
+package golayout.v1;
+
+
+import "google/protobuf/any.proto";
+import "google/protobuf/empty.proto";
+import "google/api/annotations.proto";
+
+option go_package = ".;v1";
+
+service Box{
+  rpc Ping (google.protobuf.Empty) returns (Result) {
+    option (google.api.http) = {
+      get: "/v1/ping"
+    };
+  }
+  rpc FormListQuestionType (google.protobuf.Empty) returns (FormListQuestionTypeResp) {
+    option (google.api.http) = {
+      get: "/v1/form/list/question_type"
+    };
+  }
+  rpc FormGet (FormGetReq) returns (FormGetResp) {
+    option (google.api.http) = {
+      get: "/v1/form/single"
+    };
+  }
+  rpc FormSave (FormSaveReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/form/save",
+      body:"*",
+    };
+  }
+  rpc FormAnswerSave (FormSaveReq) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/v1/form/answer_save",
+      body:"*",
+    };
+  }
+  rpc FormList (FormListReq) returns (FormListResp) {
+    option (google.api.http) = {
+      get: "/v1/form/list",
+    };
+  }
+}
+
+message Result{
+  int64 code = 1;
+  string message = 2;
+  google.protobuf.Any data = 3;
+}
+
+message FormListQuestionTypeResp {
+  repeated FormItems list = 1;
+}
+
+message FormGetReq{
+  string uuid = 1;
+}
+
+message FormGetResp{
+  FormStruct form = 1;
+}
+
+message FormSaveReq{
+  FormStruct form = 1;
+}
+
+message FormListReq{
+
+}
+
+message FormListResp{
+  message FormList {
+    string uuid = 1;
+    string form_title = 2;
+    string sub_title = 3;
+  }
+  repeated FormList list = 1;
+}
+
+// 表单结构 -----------
+message FormStruct {
+  string form_title = 1;
+  string sub_title = 2;
+  string form_uuid = 3;
+  repeated FormItems items = 4;
+}
+
+message FormItems {
+  FormItemContent content = 1;
+  string question_type_name = 2;
+}
+
+message FormItemContent{
+  string content_title = 1;
+  string content_type = 2;
+  string content_uuid = 3;
+  repeated FormItemContentOptions options = 4;
+  FormItemContentExtend extend = 5;
+  UserAnswer user_answer = 6;
+}
+
+message FormItemContentOptions{
+  string option_type = 1;
+  string option_value = 2;
+  FormItemContentOptionsContent option_content = 3;
+}
+
+message UserAnswer{
+  string other = 1;
+  string select = 2;
+  repeated string arr_value = 3;
+}
+
+message FormItemContentExtend{
+  bool require = 1;
+}
+
+message FormItemContentOptionsContent{
+  string text = 1;
+  string explain = 2;
+  string img = 3;
+}
+// -----------------
+

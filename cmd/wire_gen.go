@@ -8,11 +8,11 @@ package cmd
 
 import (
 	"context"
-	"github.com/comeonjy/go-kit/pkg/xlog"
 	"github.com/comeonjy/box/configs"
 	"github.com/comeonjy/box/internal/data"
 	"github.com/comeonjy/box/internal/server"
 	"github.com/comeonjy/box/internal/service"
+	"github.com/comeonjy/go-kit/pkg/xlog"
 )
 
 import (
@@ -23,10 +23,10 @@ import (
 
 func InitApp(ctx context.Context, logger *xlog.Logger) *App {
 	configsInterface := configs.NewConfig(ctx)
-	dataData := data.NewData(configsInterface)
-	workRepo := data.NewWorkRepo(dataData)
-	schedulerService := service.NewSchedulerService(configsInterface, logger, workRepo)
-	grpcServer := server.NewGrpcServer(schedulerService, configsInterface, logger)
+	dataData := data.NewData(configsInterface, logger)
+	formRepo := data.NewFormRepo(dataData)
+	boxService := service.NewBoxService(configsInterface, logger, formRepo)
+	grpcServer := server.NewGrpcServer(boxService, configsInterface, logger)
 	httpServer := server.NewHttpServer(ctx, configsInterface, logger)
 	app := newApp(ctx, grpcServer, httpServer, configsInterface)
 	return app
