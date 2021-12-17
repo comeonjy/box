@@ -49,6 +49,8 @@ func (m *Config) Validate() error {
 
 	// no validation rules for MysqlConf
 
+	// no validation rules for AccountGrpc
+
 	return nil
 }
 

@@ -6,7 +6,6 @@ import (
 
 	v1 "github.com/comeonjy/box/api/v1"
 	"github.com/comeonjy/box/internal/data"
-	"github.com/comeonjy/box/pkg/errcode"
 	"github.com/comeonjy/go-kit/pkg/xerror"
 	"github.com/google/uuid"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -15,11 +14,11 @@ import (
 func (svc *BoxService) FormGet(ctx context.Context, in *v1.FormGetReq) (*v1.FormGetResp, error) {
 	form, err := svc.formRepo.GetFormByUUID(in.GetUuid())
 	if err != nil {
-		return nil, xerror.New(errcode.SQLErr, err.Error())
+		return nil, xerror.New(xerror.SQLErr, err.Error())
 	}
 	contentList, err := svc.formRepo.ListContentByFormUUID(in.GetUuid())
 	if err != nil {
-		return nil, xerror.New(errcode.SQLErr, err.Error())
+		return nil, xerror.New(xerror.SQLErr, err.Error())
 	}
 
 	res := v1.FormGetResp{
@@ -174,16 +173,16 @@ func (svc *BoxService) FormSave(ctx context.Context, in *v1.FormSaveReq) (*empty
 	}
 	if len(in.GetForm().FormUuid) > 0 {
 		if err := svc.formRepo.UpdateForm(form); err != nil {
-			return nil, xerror.New(errcode.SQLErr, err.Error())
+			return nil, xerror.New(xerror.SQLErr, err.Error())
 		}
 	} else {
 		form.UUID = uuid.NewString()
 		if err := svc.formRepo.CreateForm(form); err != nil {
-			return nil, xerror.New(errcode.SQLErr, err.Error())
+			return nil, xerror.New(xerror.SQLErr, err.Error())
 		}
 	}
 	if err := svc.saveContent(ctx, form.UUID, in.GetForm().GetItems()); err != nil {
-		return nil, xerror.New(errcode.SQLErr, err.Error())
+		return nil, xerror.New(xerror.SQLErr, err.Error())
 	}
 
 	return &emptypb.Empty{}, nil
@@ -230,7 +229,7 @@ func (svc *BoxService) saveContent(ctx context.Context, formUUID string, items [
 func (svc *BoxService) FormList(ctx context.Context, in *v1.FormListReq) (*v1.FormListResp, error) {
 	form, err := svc.formRepo.ListForm()
 	if err != nil {
-		return nil, xerror.New(errcode.SQLErr, err.Error())
+		return nil, xerror.New(xerror.SQLErr, err.Error())
 	}
 	res := make([]*v1.FormListResp_FormList, 0)
 	for _, v := range form {
@@ -247,7 +246,7 @@ func (svc *BoxService) FormAnswerSave(ctx context.Context, in *v1.FormSaveReq) (
 	for _, v := range in.GetForm().GetItems() {
 		arrValue, err := json.Marshal(v.GetContent().GetUserAnswer().GetArrValue())
 		if err != nil {
-			return nil, xerror.New(errcode.SQLErr, err.Error())
+			return nil, xerror.New(xerror.SQLErr, err.Error())
 		}
 		if err := svc.formRepo.CreateFormAnswer(&data.FormAnswerModel{
 			UserUUID:        "",
@@ -257,7 +256,7 @@ func (svc *BoxService) FormAnswerSave(ctx context.Context, in *v1.FormSaveReq) (
 			Other:           v.GetContent().GetUserAnswer().GetOther(),
 			ArrValue:        string(arrValue),
 		}); err != nil {
-			return nil, xerror.New(errcode.SQLErr, err.Error())
+			return nil, xerror.New(xerror.SQLErr, err.Error())
 		}
 	}
 	return &emptypb.Empty{}, nil

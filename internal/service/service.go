@@ -4,9 +4,11 @@ import (
 	"context"
 
 	"github.com/google/wire"
+	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/emptypb"
 
+	account "github.com/comeonjy/account/api/v1"
 	v1 "github.com/comeonjy/box/api/v1"
 	"github.com/comeonjy/box/configs"
 	"github.com/comeonjy/box/internal/data"
@@ -17,16 +19,22 @@ var ProviderSet = wire.NewSet(NewBoxService)
 
 type BoxService struct {
 	v1.UnimplementedBoxServer
-	conf     configs.Interface
-	logger   *xlog.Logger
-	formRepo data.FormRepo
+	conf       configs.Interface
+	logger     *xlog.Logger
+	formRepo   data.FormRepo
+	accountSvc account.AccountClient
 }
 
 func NewBoxService(conf configs.Interface, logger *xlog.Logger, formRepo data.FormRepo) *BoxService {
+	accountDial, err := grpc.Dial(conf.Get().AccountGrpc, grpc.WithInsecure())
+	if err != nil {
+		panic(err)
+	}
 	return &BoxService{
-		conf:     conf,
-		formRepo: formRepo,
-		logger:   logger,
+		conf:       conf,
+		formRepo:   formRepo,
+		logger:     logger,
+		accountSvc: account.NewAccountClient(accountDial),
 	}
 }
 

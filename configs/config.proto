@@ -15,4 +15,7 @@ message Config {
   string mysql_conf = 2 [
     (gogoproto.jsontag) = "mysql_conf"
   ];
+  string account_grpc = 3 [
+    (gogoproto.jsontag) = "account_grpc"
+  ];
 }

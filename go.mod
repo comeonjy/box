@@ -3,7 +3,7 @@ module github.com/comeonjy/box
 go 1.17
 
 require (
-	github.com/comeonjy/go-kit v0.0.5-0.20211204083859-bb6b946f3682
+	github.com/comeonjy/go-kit v0.0.6-0.20211217101337-f1a59188ee76
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/wire v0.5.0
@@ -43,7 +43,10 @@ require (
 	howett.net/plist v0.0.0-20181124034731-591f970eefbb // indirect
 )
 
-require gorm.io/gorm v1.21.16
+require (
+	github.com/comeonjy/account v0.0.0-20211204133210-49178bcedd26
+	gorm.io/gorm v1.21.16
+)
 
 require (
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
