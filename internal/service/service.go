@@ -3,6 +3,9 @@ package service
 import (
 	"context"
 
+	"github.com/comeonjy/go-kit/pkg/xerror"
+	"github.com/comeonjy/go-kit/pkg/xredis"
+	"github.com/go-redis/redis/v8"
 	"github.com/google/wire"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
@@ -23,6 +26,7 @@ type BoxService struct {
 	logger     *xlog.Logger
 	formRepo   data.FormRepo
 	accountSvc account.AccountClient
+	redis      *redis.Client
 }
 
 func NewBoxService(conf configs.Interface, logger *xlog.Logger, formRepo data.FormRepo) *BoxService {
@@ -35,6 +39,7 @@ func NewBoxService(conf configs.Interface, logger *xlog.Logger, formRepo data.Fo
 		formRepo:   formRepo,
 		logger:     logger,
 		accountSvc: account.NewAccountClient(accountDial),
+		redis:      xredis.New(conf.Get().RedisConf),
 	}
 }
 
@@ -46,36 +51,12 @@ func (svc *BoxService) AuthFuncOverride(ctx context.Context, fullMethodName stri
 }
 
 func (svc *BoxService) Ping(ctx context.Context, in *emptypb.Empty) (*v1.Result, error) {
+	var arr []string
+	if err := svc.redis.Keys(ctx, "*").ScanSlice(&arr); err != nil {
+		return nil, xerror.New(xerror.RedisErr, err.Error())
+	}
 	return &v1.Result{
 		Code:    200,
 		Message: svc.conf.Get().Mode,
 	}, nil
-}
-
-type FormStruct struct {
-	FormTitle string `json:"form_title"`
-	SubTitle  string `json:"sub_title"`
-	Items     []struct {
-		Content struct {
-			ContentTitle string `json:"content_title"`
-			ContentType  string `json:"content_type"`
-			Options      []struct {
-				OptionType    string `json:"option_type"`
-				OptionContent struct {
-					Text    string `json:"text"`
-					Explain string `json:"explain"`
-					Img     string `json:"img"`
-				} `json:"option_content"`
-				OptionValue string `json:"option_value"`
-			} `json:"options"`
-			Extend struct {
-				Require bool `json:"require"`
-			} `json:"extend"`
-			UserAnswer struct {
-				Other    string   `json:"other"`
-				Select   string   `json:"select"`
-				ArrValue []string `json:"arr_value"`
-			} `json:"user_answer"`
-		} `json:"content"`
-	} `json:"items"`
 }

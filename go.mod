@@ -3,7 +3,7 @@ module github.com/comeonjy/box
 go 1.17
 
 require (
-	github.com/comeonjy/go-kit v0.0.6-0.20211217101337-f1a59188ee76
+	github.com/comeonjy/go-kit v0.0.6-0.20220107101021-21fda166575c
 	github.com/envoyproxy/protoc-gen-validate v0.6.1
 	github.com/gogo/protobuf v1.3.2
 	github.com/google/wire v0.5.0
@@ -45,10 +45,13 @@ require (
 
 require (
 	github.com/comeonjy/account v0.0.0-20211204133210-49178bcedd26
+	github.com/go-redis/redis/v8 v8.11.4
 	gorm.io/gorm v1.21.16
 )
 
 require (
+	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/dgryski/go-rendezvous v0.0.0-20200823014737-9f7001d12a5f // indirect
 	github.com/go-sql-driver/mysql v1.6.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.2 // indirect

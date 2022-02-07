@@ -18,4 +18,7 @@ message Config {
   string account_grpc = 3 [
     (gogoproto.jsontag) = "account_grpc"
   ];
+  string redis_conf = 4 [
+    (gogoproto.jsontag) = "redis_conf"
+  ];
 }

@@ -51,6 +51,8 @@ func (m *Config) Validate() error {
 
 	// no validation rules for AccountGrpc
 
+	// no validation rules for RedisConf
+
 	return nil
 }
 
