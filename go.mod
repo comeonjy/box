@@ -3,9 +3,8 @@ module github.com/comeonjy/box
 go 1.17
 
 require (
-	github.com/comeonjy/go-kit v0.0.6-0.20220107101021-21fda166575c
-	github.com/envoyproxy/protoc-gen-validate v0.6.1
-	github.com/gogo/protobuf v1.3.2
+	github.com/comeonjy/go-kit v0.0.6-0.20220221063528-e0257b4806d7
+	github.com/envoyproxy/protoc-gen-validate v0.6.1 // indirect
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.6.0
 	github.com/spf13/cobra v1.2.1
